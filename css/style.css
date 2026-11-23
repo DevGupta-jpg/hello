@@ -3650,3 +3650,50 @@ body.modal-open {
 .rooms-moved-section .container{min-width:0}
 .rooms-moved-section h2{margin-top:6px}
 .rooms-moved-section{overflow:hidden}
+
+/* Facilities page - weekly menu, service standards and interactive comforts. */
+.facility-menu-card{
+  background:#fff;
+  border:1px solid #dfeaf7;
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 10px 30px rgba(16,37,74,.06);
+}
+.facility-menu-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:22px}
+.facility-menu-head h2{margin:6px 0 4px}
+.facility-menu-head p{margin:0;color:var(--muted)}
+.menu-day-tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.menu-day{border:1px solid #dce8f5;background:#f7fbff;color:#17233b;border-radius:999px;padding:10px 17px;font:inherit;font-weight:800;cursor:pointer;transition:.2s ease}
+.menu-day:hover,.menu-day.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 8px 18px rgba(0,107,255,.18)}
+.menu-meals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.menu-meal{min-height:138px;border:1px solid #dce8f5;border-radius:18px;background:#f7fbff;padding:22px}
+.menu-meal span{display:block;font-size:.8rem;font-weight:900;letter-spacing:.04em;margin-bottom:10px}
+.menu-meal strong{display:block;font-size:1.03rem;line-height:1.45;color:#17233b}
+.menu-meal.breakfast span{color:#c87800}.menu-meal.lunch{background:#f5faff;border-color:#bcd9f7}.menu-meal.lunch span{color:#0878e8}.menu-meal.dinner span{color:#5b55c9}
+.tiffin-service{margin-top:18px;border:1px solid #bfdaf4;background:#edf7ff;border-radius:18px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px}
+.tiffin-icon{width:60px;height:60px;border-radius:15px;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:1.35rem}
+.tiffin-service h3{margin:0 0 4px;font-size:1.15rem}.tiffin-service p{margin:0;color:var(--muted);line-height:1.5}
+.tiffin-service .btn{white-space:nowrap}
+.facility-service-section{padding-top:26px}.service-standard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
+.service-standard-card{background:#fff;border:1px solid #e1ebf6;border-radius:22px;padding:28px;min-height:280px;box-shadow:0 8px 24px rgba(16,37,74,.05)}
+.service-standard-icon{width:62px;height:62px;border-radius:16px;background:#eaf5ff;color:#0878e8;display:grid;place-items:center;font-size:1.45rem;margin-bottom:32px}
+.service-standard-card h3{margin:0 0 10px;font-size:1.18rem}.service-standard-card p{margin:0;color:var(--muted);line-height:1.65}
+.amenity-chip-panel{background:#fff;border:1px solid #dfeaf7;border-radius:24px;padding:28px;box-shadow:0 8px 24px rgba(16,37,74,.05)}
+.facility-amenity-chips{display:flex;flex-wrap:wrap;gap:12px}
+.facility-amenity-chip{border:1px solid #dce8f5;background:#f7fbff;color:#17233b;border-radius:999px;padding:11px 17px;font:inherit;font-weight:750;cursor:pointer;transition:.2s ease}
+.facility-amenity-chip:hover,.facility-amenity-chip.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 8px 18px rgba(0,107,255,.16)}
+.facility-amenity-detail{margin-top:22px;border:1px solid #dce8f5;background:#f7fbff;border-radius:18px;padding:18px 22px;display:flex;align-items:center;gap:14px}
+.facility-info-icon{width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:900}.facility-amenity-detail p{margin:0;color:#17233b;line-height:1.5}.facility-amenity-detail strong{font-weight:850}
+@media(max-width:900px){
+  .facility-menu-head{flex-direction:column}.menu-day-tabs{justify-content:flex-start}.menu-meals,.service-standard-grid{grid-template-columns:1fr}
+  .tiffin-service{grid-template-columns:auto 1fr}.tiffin-service .btn{grid-column:2;width:max-content}
+}
+@media(max-width:767px){
+  .facility-menu-card,.amenity-chip-panel{padding:18px;border-radius:18px}
+  .menu-day-tabs{width:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;justify-content:flex-start}
+  .menu-day{flex:0 0 auto;padding:9px 15px}
+  .menu-meal{min-height:0;padding:18px}.menu-meal strong{font-size:.98rem}
+  .tiffin-service{grid-template-columns:1fr;padding:18px;gap:12px}.tiffin-icon{width:50px;height:50px}.tiffin-service .btn{grid-column:auto;width:100%;text-align:center}
+  .service-standard-card{min-height:0;padding:22px}.service-standard-icon{margin-bottom:22px}
+  .facility-amenity-chips{gap:8px}.facility-amenity-chip{padding:9px 12px;font-size:.86rem}.facility-amenity-detail{padding:15px;align-items:flex-start}
+}

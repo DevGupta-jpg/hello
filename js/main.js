@@ -422,3 +422,50 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
     window.open("https://wa.me/"+CONFIG.whatsappNumber+"?text="+encodeURIComponent(msg),"_blank","noopener");
   });
 });
+
+// Facilities page: weekly menu tabs and interactive amenity chips.
+(function(){
+  const menuData = {
+    mon:{breakfast:"Aloo Paratha with Curd, Pickle & Hot Tea",lunch:"Rajma Masala, Jeera Rice, Seasonal Sabzi, 4 Rotis & Salad (Tiffin Ready)",dinner:"Dal Tadka, Aloo Gobhi, Steamed Rice & Hot Tawa Phulkas"},
+    tue:{breakfast:"Vegetable Poha with Peanuts, Sev & Ginger Tea",lunch:"Chole Masala, Plain Rice, Boondi Raita & 4 Rotis (Tiffin Ready)",dinner:"Mix Veg Sabzi, Yellow Dal Fry, Soft Rotis & Roasted Papad"},
+    wed:{breakfast:"Paneer Paratha with Curd, Pickle & Tea",lunch:"Dal Makhani, Jeera Rice, Seasonal Sabzi, 4 Rotis & Salad (Tiffin Ready)",dinner:"Aloo Jeera, Moong Dal, Steamed Rice & Hot Rotis"},
+    thu:{breakfast:"Besan Chilla with Mint Chutney & Tea",lunch:"Rajma, Rice, Aloo Gobhi, 4 Rotis & Salad (Tiffin Ready)",dinner:"Kadhi Pakora, Jeera Rice, Seasonal Sabzi & Hot Rotis"},
+    fri:{breakfast:"Veg Sandwich / Besan Chilla with Mint Chutney & Tea",lunch:"Dal Palak, Aloo Matar, Jeera Rice & 4 Rotis (Tiffin Ready)",dinner:"Shahi Paneer / Kadhai Paneer, Dal Fry, Pulao & Hot Rotis"},
+    sat:{breakfast:"Aloo Pyaaz Paratha with Curd, Pickle & Tea",lunch:"Chole, Jeera Rice, Mixed Veg, 4 Rotis & Salad (Tiffin Ready)",dinner:"Matar Paneer, Dal Tadka, Rice & Hot Phulkas"},
+    sun:{breakfast:"Poori Bhaji with Curd & Hot Tea",lunch:"Veg Pulao, Dal, Seasonal Sabzi, 4 Rotis & Raita (Tiffin Ready)",dinner:"Paneer Masala, Dal Fry, Steamed Rice & Hot Rotis"}
+  };
+  const menuButtons=document.querySelectorAll("[data-menu-day]");
+  const breakfast=document.querySelector("[data-menu-breakfast]");
+  const lunch=document.querySelector("[data-menu-lunch]");
+  const dinner=document.querySelector("[data-menu-dinner]");
+  menuButtons.forEach(btn=>btn.addEventListener("click",()=>{
+    const data=menuData[btn.dataset.menuDay]; if(!data)return;
+    menuButtons.forEach(b=>{const active=b===btn;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});
+    if(breakfast)breakfast.textContent=data.breakfast;
+    if(lunch)lunch.textContent=data.lunch;
+    if(dinner)dinner.textContent=data.dinner;
+  }));
+
+  const amenities={
+    wifi:["High-Speed Wi-Fi","Reliable high-speed internet access for online classes, work, calls and entertainment."],
+    backup:["24×7 Power Backup","Backup support helps keep lights, fans and Wi-Fi available during power interruptions."],
+    cctv:["CCTV Surveillance","CCTV coverage is provided around key common and entry areas for resident safety."],
+    housekeeping:["Daily Housekeeping","Regular cleaning support helps keep rooms, washrooms and common areas neat and hygienic."],
+    fridge:["Common Refrigerator","Common refrigerator access is available for residents to store suitable personal food items."],
+    lift:["Lift Access","Lift access makes daily movement between floors more convenient for residents."],
+    bike:["Bike Parking","Bike parking is available for residents for convenient two-wheeler access."],
+    common:["Clean Common Areas","Dining, corridors and shared spaces are maintained regularly for comfortable daily use."],
+    geyser:["24×7 Geyser","Geyser hot-water support is available for comfortable bathing throughout the day."],
+    markets:["Nearby Markets (Jagat Farm)","Jagat Farm is nearby for groceries, stationery, pharmacies, ATMs, salons and everyday essentials."],
+    washing:["Washing Machine","Washing machine facility is available for residents for convenient everyday laundry needs."]
+  };
+  const amenityButtons=document.querySelectorAll("[data-amenity]");
+  const amenityTitle=document.querySelector("[data-amenity-title]");
+  const amenityDescription=document.querySelector("[data-amenity-description]");
+  amenityButtons.forEach(btn=>btn.addEventListener("click",()=>{
+    const data=amenities[btn.dataset.amenity]; if(!data)return;
+    amenityButtons.forEach(b=>b.classList.toggle("active",b===btn));
+    if(amenityTitle)amenityTitle.textContent=data[0]+":";
+    if(amenityDescription)amenityDescription.textContent=data[1];
+  }));
+})();
