@@ -49,19 +49,34 @@ document.querySelectorAll(".faq-question").forEach(btn=>btn.addEventListener("cl
 document.querySelectorAll("[data-room-filter]").forEach(btn=>btn.addEventListener("click",()=>{const filter=btn.dataset.roomFilter;document.querySelectorAll("[data-room-filter]").forEach(b=>b.classList.toggle("active",b===btn));document.querySelectorAll("[data-room-card]").forEach(card=>{card.hidden=filter!=="all" && card.dataset.roomCard!==filter;});}));
 
 (function(){
+  function applyGalleryFilter(filter){
+    const buttons = document.querySelectorAll("[data-gallery-filter]");
+    buttons.forEach(btn => btn.classList.toggle("active", btn.dataset.galleryFilter === filter));
+    document.querySelectorAll("[data-gallery-category]").forEach(card => {
+      card.hidden = filter !== "all" && card.dataset.galleryCategory !== filter;
+    });
+  }
+
   function setupGalleryFilters(){
     const root = document.querySelector(".filters");
     if(!root || root.dataset.filtersReady === "1") return;
     root.dataset.filtersReady = "1";
-    root.addEventListener("click", event=>{
+
+    root.addEventListener("click", event => {
       const btn = event.target.closest("[data-gallery-filter]");
       if(!btn || !root.contains(btn)) return;
       event.preventDefault();
-      const filter = btn.dataset.galleryFilter || "all";
-      root.querySelectorAll("[data-gallery-filter]").forEach(b=>b.classList.toggle("active", b === btn));
-      document.querySelectorAll("[data-gallery-category]").forEach(card=>{
-        card.hidden = filter !== "all" && card.dataset.galleryCategory !== filter;
-      });
+      event.stopPropagation();
+      applyGalleryFilter(btn.dataset.galleryFilter || "all");
+    }, {passive:false});
+
+    root.querySelectorAll("[data-gallery-filter]").forEach(btn => {
+      btn.addEventListener("pointerup", event => {
+        if(event.pointerType === "touch") {
+          event.preventDefault();
+          applyGalleryFilter(btn.dataset.galleryFilter || "all");
+        }
+      }, {passive:false});
     });
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", setupGalleryFilters);
@@ -327,7 +342,8 @@ function openRoomEnquiry(roomName = "", roomPrice = "") {
 window.openRoomEnquiry = openRoomEnquiry;
 
 document.querySelectorAll("[data-room-submit]").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (event) => {
+    event.preventDefault();
     const roomName = btn.dataset.roomSubmit || "";
     const priceMap = {
       "4 Seater Room": "₹10,000–₹11,000",
@@ -584,10 +600,8 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
     }
 
     const tabRoot = document.querySelector(".nearby-tabs");
-    tabRoot?.addEventListener("click", event=>{
-      const tab = event.target.closest("[data-nearby-filter]");
-      if(!tab || !tabRoot.contains(tab)) return;
-      event.preventDefault();
+    const activateNearbyTab = tab => {
+      if(!tab) return;
       active = tab.dataset.nearbyFilter || "all";
       tabs.forEach(t=>{
         const on = t === tab;
@@ -596,8 +610,27 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
       });
       if(search) search.value = "";
       apply();
+    };
+
+    tabRoot?.addEventListener("click", event=>{
+      const tab = event.target.closest("[data-nearby-filter]");
+      if(!tab || !tabRoot.contains(tab)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      activateNearbyTab(tab);
+    }, {passive:false});
+
+    tabs.forEach(tab => {
+      tab.addEventListener("pointerup", event => {
+        if(event.pointerType === "touch") {
+          event.preventDefault();
+          activateNearbyTab(tab);
+        }
+      }, {passive:false});
     });
+
     search?.addEventListener("input",apply);
+    search?.addEventListener("search",apply);
 
     document.querySelectorAll("[data-nearby-map]").forEach(a=>{
       a.addEventListener("click",()=>{
@@ -610,4 +643,51 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", setupNearby);
   else setupNearby();
+})();
+
+
+/* Additive Instagram floating action. Existing WhatsApp button remains unchanged. */
+(function(){
+  const INSTAGRAM_URL = "https://www.instagram.com/theelitestaypg/";
+  if(document.querySelector(".floating-instagram")) return;
+  const link = document.createElement("a");
+  link.className = "floating-instagram";
+  link.href = INSTAGRAM_URL;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.setAttribute("aria-label", "Open The Elite Stay PG & Hostel on Instagram");
+  link.innerHTML = '<span class="instagram-mark" aria-hidden="true"><i class="fa-brands fa-instagram"></i></span><span>Instagram</span>';
+  document.body.appendChild(link);
+})();
+
+/* Additive Monochrome Mode toggle. No existing functionality is removed. */
+(function(){
+  const STORAGE_KEY = "eliteStayMonochrome";
+  const applyMode = enabled => {
+    document.body.classList.toggle("monochrome-mode", enabled);
+    document.querySelectorAll("[data-monochrome-toggle]").forEach(btn => {
+      btn.setAttribute("aria-pressed", String(enabled));
+      btn.innerHTML = `<span class="mono-dot" aria-hidden="true"></span>${enabled ? "Color Mode" : "Monochrome"}`;
+    });
+  };
+  const createToggle = () => {
+    if(document.querySelector("[data-monochrome-toggle]")) return;
+    const nav = document.querySelector(".nav");
+    if(!nav) return;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "monochrome-toggle";
+    btn.setAttribute("data-monochrome-toggle", "true");
+    btn.setAttribute("aria-label", "Toggle black and white monochrome mode");
+    btn.addEventListener("click", () => {
+      const enabled = !document.body.classList.contains("monochrome-mode");
+      localStorage.setItem(STORAGE_KEY, enabled ? "1" : "0");
+      applyMode(enabled);
+    });
+    const cta = nav.querySelector(".nav-cta");
+    if(cta) cta.before(btn); else nav.appendChild(btn);
+    applyMode(localStorage.getItem(STORAGE_KEY) === "1");
+  };
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", createToggle);
+  else createToggle();
 })();
