@@ -3789,3 +3789,11 @@ body.modal-open {
   .nearby-origin { font-size: .52rem; }
   .nearby-directions { font-size: .61rem; }
 }
+
+/* Requested filter reliability: hidden gallery cards must remain hidden on mobile. */
+.gallery-item[hidden] { display: none !important; }
+
+/* Requested navbar cleanup: no mobile dropdown/menu button. Bottom app navigation remains available. */
+@media (max-width: 767px) {
+  .menu-toggle { display: none !important; }
+}

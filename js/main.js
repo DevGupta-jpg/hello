@@ -48,7 +48,25 @@ document.querySelectorAll(".faq-question").forEach(btn=>btn.addEventListener("cl
 
 document.querySelectorAll("[data-room-filter]").forEach(btn=>btn.addEventListener("click",()=>{const filter=btn.dataset.roomFilter;document.querySelectorAll("[data-room-filter]").forEach(b=>b.classList.toggle("active",b===btn));document.querySelectorAll("[data-room-card]").forEach(card=>{card.hidden=filter!=="all" && card.dataset.roomCard!==filter;});}));
 
-document.querySelectorAll("[data-gallery-filter]").forEach(btn=>btn.addEventListener("click",()=>{const filter=btn.dataset.galleryFilter;document.querySelectorAll("[data-gallery-filter]").forEach(b=>b.classList.toggle("active",b===btn));document.querySelectorAll("[data-gallery-category]").forEach(card=>{card.hidden=filter!=="all" && card.dataset.galleryCategory!==filter;});}));
+(function(){
+  function setupGalleryFilters(){
+    const root = document.querySelector(".filters");
+    if(!root || root.dataset.filtersReady === "1") return;
+    root.dataset.filtersReady = "1";
+    root.addEventListener("click", event=>{
+      const btn = event.target.closest("[data-gallery-filter]");
+      if(!btn || !root.contains(btn)) return;
+      event.preventDefault();
+      const filter = btn.dataset.galleryFilter || "all";
+      root.querySelectorAll("[data-gallery-filter]").forEach(b=>b.classList.toggle("active", b === btn));
+      document.querySelectorAll("[data-gallery-category]").forEach(card=>{
+        card.hidden = filter !== "all" && card.dataset.galleryCategory !== filter;
+      });
+    });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", setupGalleryFilters);
+  else setupGalleryFilters();
+})();
 
 
 const modalBackdrop = document.querySelector("#roomModal");
@@ -565,7 +583,11 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
       if(empty) empty.hidden = shown !== 0;
     }
 
-    tabs.forEach(tab=>tab.addEventListener("click",()=>{
+    const tabRoot = document.querySelector(".nearby-tabs");
+    tabRoot?.addEventListener("click", event=>{
+      const tab = event.target.closest("[data-nearby-filter]");
+      if(!tab || !tabRoot.contains(tab)) return;
+      event.preventDefault();
       active = tab.dataset.nearbyFilter || "all";
       tabs.forEach(t=>{
         const on = t === tab;
@@ -574,7 +596,7 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
       });
       if(search) search.value = "";
       apply();
-    }));
+    });
     search?.addEventListener("input",apply);
 
     document.querySelectorAll("[data-nearby-map]").forEach(a=>{
