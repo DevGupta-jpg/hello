@@ -135,10 +135,11 @@ document.querySelectorAll("[data-room-card]").forEach(card => {
 
 /* Property detail page: room-specific gallery, pricing, details and separate video slot. */
 const ROOM_VIDEOS = {
-  "4 Seater Room": "https://www.youtube.com/embed/rCuTx_9EP3w",
-  "3 Seater Room": "",
-  "2 Seater Room": "",
-  "1 Seater Room": ""
+  // Temporary demo video URLs. Replace each URL later with that room's own video.
+  "4 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+  "3 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+  "2 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+  "1 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
 };
 
 const propertyRoot = document.querySelector("[data-property-page]");
@@ -181,14 +182,38 @@ if (propertyRoot) {
   if (videoTitle) videoTitle.textContent = `${room.name} Video`;
   if (videoWrap) {
     videoWrap.innerHTML = videoSrc
-      ? `<iframe src="${videoSrc}" title="${room.name} room tour video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
+      ? `<video controls playsinline preload="metadata" poster="${images[0] || ""}"><source src="${videoSrc}" type="video/mp4">Your browser does not support the video tag.</video>`
       : `<div class="property-video-placeholder"><span class="property-video-play">▶</span><strong>${room.name} Video</strong><small>Add this room’s separate video URL in <code>ROOM_VIDEOS</code> inside <code>js/main.js</code>.</small></div>`;
   }
 
   propertyRoot.querySelectorAll("[data-property-book]").forEach(btn=>btn.addEventListener("click",()=>{
-    sessionStorage.setItem("eliteStaySelectedRoom", room.name);
-    location.href = "contact.html#contact-form";
+    openRoomEnquiry(room.name, room.price);
   }));
+
+  const otherRoomsWrap = propertyRoot.querySelector("[data-other-rooms]");
+  if (otherRoomsWrap) {
+    const otherRooms = Object.values(roomBySlug).filter(item => item.name !== room.name);
+    otherRoomsWrap.innerHTML = otherRooms.map(item => {
+      const image = (ROOM_MEDIA[item.name] || ROOM_MEDIA["4 Seater Room"])[0];
+      const slug = Object.keys(roomBySlug).find(key => roomBySlug[key].name === item.name);
+      return `<article class="property-other-room-card">
+        <div class="property-other-room-image"><img src="${image}" alt="${item.name}" loading="lazy"></div>
+        <div class="property-other-room-body">
+          <span class="eyebrow">ROOM OPTION</span>
+          <h3>${item.name}</h3>
+          <div class="property-other-room-price">${item.price}<small> / month</small></div>
+          <p>Fully furnished • AC • Attached Washroom</p>
+          <div class="property-other-room-actions">
+            <button class="btn" type="button" data-other-room-enquiry data-room-name="${item.name}" data-room-price="${item.price}">Enquiry</button>
+            <a class="btn btn-outline" href="property.html?room=${encodeURIComponent(slug)}">View Details →</a>
+          </div>
+        </div>
+      </article>`;
+    }).join("");
+    otherRoomsWrap.querySelectorAll("[data-other-room-enquiry]").forEach(btn => {
+      btn.addEventListener("click", () => openRoomEnquiry(btn.dataset.roomName, btn.dataset.roomPrice));
+    });
+  }
 }
 
 const lightbox=document.querySelector("#lightbox");
@@ -202,7 +227,7 @@ document.addEventListener("keydown",e=>{if (e.key === "Escape") {
 }
 if(lightbox?.classList.contains("show")&&e.key==="ArrowRight")showLightbox(lightboxIndex+1);if(lightbox?.classList.contains("show")&&e.key==="ArrowLeft")showLightbox(lightboxIndex-1);});
 
-/* Room-card enquiry popup + Formspree submission */
+/* Room enquiry popup + Formspree submission */
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xoednvnb";
 
 function createInquiryModal() {
@@ -212,27 +237,29 @@ function createInquiryModal() {
   wrap.id = "roomInquiryModal";
   wrap.setAttribute("aria-hidden", "true");
   wrap.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="roomInquiryTitle">
-      <button class="modal-close" type="button" data-inquiry-close aria-label="Close">×</button>
-      <div class="modal-content">
-        <span class="eyebrow">ROOM ENQUIRY</span>
-        <h2 id="roomInquiryTitle">Book Your Room</h2>
-        <p class="muted">Send your details and The Elite Stay PG & Hostel will contact you.</p>
+    <div class="modal inquiry-room-modal" role="dialog" aria-modal="true" aria-labelledby="roomInquiryTitle">
+      <button class="modal-close inquiry-close" type="button" data-inquiry-close aria-label="Close">×</button>
+      <div class="inquiry-room-header">
+        <span class="eyebrow" data-inquiry-room-label>ROOM ENQUIRY</span>
+        <h2 id="roomInquiryTitle">Submit Room Enquiry</h2>
+      </div>
+      <div class="modal-content inquiry-room-content">
         <form id="roomInquiryForm" action="${FORMSPREE_ENDPOINT}" method="POST">
           <input type="hidden" name="_subject" value="The Elite Stay PG & Hostel - Room Enquiry">
-          <input type="hidden" name="source" value="Room Card Enquiry">
-          <div class="form-grid">
-            <div class="field"><label for="inquiryName">Full Name *</label><input id="inquiryName" name="name" autocomplete="name" required placeholder="Enter your name"></div>
-            <div class="field"><label for="inquiryPhone">Phone Number *</label><input id="inquiryPhone" name="phone" type="tel" autocomplete="tel" required pattern="[0-9+() -]{8,20}" placeholder="Enter phone number"></div>
-            <div class="field"><label for="inquiryEmail">Email</label><input id="inquiryEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com"></div>
-            <div class="field"><label for="inquiryRoom">Room Type *</label><select id="inquiryRoom" name="roomType" required><option value="">Select room type</option><option>4 Seater Room</option><option>3 Seater Room</option><option>2 Seater Room</option><option>1 Seater Room</option></select></div>
-            <div class="field"><label for="inquiryMoveDate">Expected Move-in Date</label><input id="inquiryMoveDate" name="moveDate" type="date"></div>
-            <div class="field"><label for="inquiryOccupants">Number of Occupants</label><select id="inquiryOccupants" name="occupants"><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-            <div class="field full"><label for="inquiryMessage">Message</label><textarea id="inquiryMessage" name="message" placeholder="Any requirement or question..."></textarea></div>
+          <input type="hidden" name="source" value="Room Enquiry Popup">
+          <input type="hidden" name="roomPrice" id="inquiryRoomPrice">
+          <input type="hidden" name="roomType" id="inquiryRoomHidden">
+          <div class="form-grid inquiry-room-grid">
+            <div class="field"><label for="inquiryName">Full Name *</label><input id="inquiryName" name="name" autocomplete="name" required placeholder="e.g. Rahul Sharma"></div>
+            <div class="field"><label for="inquiryPhone">Mobile Number *</label><input id="inquiryPhone" name="phone" type="tel" autocomplete="tel" required pattern="[0-9+() -]{8,20}" placeholder="10-digit mobile number"></div>
+            <div class="field full"><label for="inquiryMoveDate">Expected Move-in Date *</label><input id="inquiryMoveDate" name="moveDate" type="date" required></div>
+            <div class="field"><label for="inquiryRoomPreference">Room Preference</label><select id="inquiryRoomPreference" name="roomPreference"><option>Balcony Room</option><option>Non-Balcony Room</option></select></div>
+            <div class="field"><label for="inquiryWashroomPreference">Washroom Preference</label><select id="inquiryWashroomPreference" name="washroomPreference"><option>Attached Washroom</option></select></div>
+            <div class="field full"><label for="inquiryMessage">Message (Optional)</label><textarea id="inquiryMessage" name="message" placeholder="Any questions about AC, geyser, meals, or visiting time?"></textarea></div>
           </div>
-          <div class="form-actions">
-            <button class="btn btn-outline" type="button" data-inquiry-cancel>Cancel</button>
-            <button class="btn" type="submit" data-inquiry-submit>Send Enquiry ↗</button>
+          <div class="form-actions inquiry-room-actions">
+            <button class="btn" type="submit" data-inquiry-submit>Send Enquiry</button>
+            <button class="btn inquiry-whatsapp-btn" type="button" data-inquiry-whatsapp><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp</button>
           </div>
           <div class="notice" data-inquiry-notice role="status" aria-live="polite"></div>
         </form>
@@ -242,97 +269,129 @@ function createInquiryModal() {
   return wrap;
 }
 
-const roomCards = document.querySelectorAll("[data-room-card]");
-if (roomCards.length) {
-  const inquiryModal = createInquiryModal();
-  const inquiryForm = inquiryModal.querySelector("#roomInquiryForm");
-  const inquiryNotice = inquiryModal.querySelector("[data-inquiry-notice]");
-  const inquiryRoom = inquiryModal.querySelector("[name=roomType]");
+const inquiryModal = createInquiryModal();
+const inquiryForm = inquiryModal.querySelector("#roomInquiryForm");
+const inquiryNotice = inquiryModal.querySelector("[data-inquiry-notice]");
+const inquiryRoomLabel = inquiryModal.querySelector("[data-inquiry-room-label]");
+const inquiryRoomHidden = inquiryModal.querySelector("#inquiryRoomHidden");
+const inquiryRoomPrice = inquiryModal.querySelector("#inquiryRoomPrice");
+const inquiryMoveDate = inquiryModal.querySelector("#inquiryMoveDate");
+let currentInquiryRoom = "";
+let currentInquiryPrice = "";
 
-  const closeInquiry = () => {
-    inquiryModal.classList.remove("show");
-    inquiryModal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("modal-open");
-  };
-
-  const openInquiry = (roomName = "") => {
-    if (roomName && inquiryRoom) inquiryRoom.value = roomName;
-    if (inquiryNotice) {
-      inquiryNotice.style.display = "none";
-      inquiryNotice.textContent = "";
-    }
-    inquiryModal.classList.add("show");
-    inquiryModal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-open");
-    setTimeout(() => inquiryModal.querySelector("[name=name]")?.focus(), 50);
-  };
-
-  document.querySelectorAll("[data-room-submit]").forEach(btn => {
-    btn.addEventListener("click", () => openInquiry(btn.dataset.roomSubmit || ""));
-  });
-
-  inquiryModal.querySelector("[data-inquiry-close]")?.addEventListener("click", closeInquiry);
-  inquiryModal.querySelector("[data-inquiry-cancel]")?.addEventListener("click", closeInquiry);
-  inquiryModal.addEventListener("click", e => { if (e.target === inquiryModal) closeInquiry(); });
-
-  inquiryForm?.addEventListener("submit", async e => {
-    e.preventDefault();
-    if (!inquiryForm.reportValidity()) return;
-
-    const submitBtn = inquiryForm.querySelector("[data-inquiry-submit]");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Sending...";
-
-    try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        body: new FormData(inquiryForm),
-        headers: { Accept: "application/json" }
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.errors?.map(x => x.message).join(", ") || `Submission failed (${response.status})`);
-
-      inquiryNotice.style.display = "block";
-      inquiryNotice.textContent = "Thank you! Your enquiry has been sent successfully.";
-      inquiryForm.reset();
-      setTimeout(closeInquiry, 1200);
-    } catch (error) {
-      inquiryNotice.style.display = "block";
-      inquiryNotice.textContent = error.message || "Network error. Please try again.";
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Send Enquiry ↗";
-    }
-  });
+if (inquiryMoveDate) {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  inquiryMoveDate.min = `${yyyy}-${mm}-${dd}`;
 }
 
-const inquiryForm=document.querySelector("#inquiryForm");
-if(inquiryForm){
-  inquiryForm.setAttribute("action", FORMSPREE_ENDPOINT);
-  inquiryForm.setAttribute("method", "POST");
-  const roomSelect=inquiryForm.querySelector('[name="roomType"]');
+function closeInquiry() {
+  inquiryModal.classList.remove("show");
+  inquiryModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+function openRoomEnquiry(roomName = "", roomPrice = "") {
+  currentInquiryRoom = roomName || "Room Enquiry";
+  currentInquiryPrice = roomPrice || "";
+  inquiryRoomLabel.textContent = roomPrice ? `${currentInquiryRoom.toUpperCase()} • ${roomPrice}/MO` : currentInquiryRoom.toUpperCase();
+  inquiryRoomHidden.value = currentInquiryRoom;
+  inquiryRoomPrice.value = currentInquiryPrice;
+  inquiryModal.classList.add("show");
+  inquiryModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+  setTimeout(() => inquiryModal.querySelector("[name=name]")?.focus(), 50);
+}
+
+window.openRoomEnquiry = openRoomEnquiry;
+
+document.querySelectorAll("[data-room-submit]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const roomName = btn.dataset.roomSubmit || "";
+    const priceMap = {
+      "4 Seater Room": "₹10,000–₹11,000",
+      "3 Seater Room": "₹12,000–₹15,000",
+      "2 Seater Room": "₹16,000–₹20,000",
+      "1 Seater Room": "₹30,000–₹31,000"
+    };
+    openRoomEnquiry(roomName, priceMap[roomName] || "");
+  });
+});
+
+inquiryModal.querySelector("[data-inquiry-close]")?.addEventListener("click", closeInquiry);
+inquiryModal.addEventListener("click", e => { if (e.target === inquiryModal) closeInquiry(); });
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeInquiry(); });
+
+inquiryForm?.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!inquiryForm.reportValidity()) return;
+  const submitBtn = inquiryForm.querySelector("[data-inquiry-submit]");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending...";
+  inquiryNotice.style.display = "none";
+  try {
+    const response = await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      body: new FormData(inquiryForm),
+      headers: { Accept: "application/json" }
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.errors?.map(x => x.message).join(", ") || `Submission failed (${response.status})`);
+    inquiryNotice.style.display = "block";
+    inquiryNotice.textContent = "Thank you! Your enquiry has been sent successfully.";
+    setTimeout(() => {
+      inquiryForm.reset();
+      inquiryRoomHidden.value = currentInquiryRoom;
+      inquiryRoomPrice.value = currentInquiryPrice;
+      closeInquiry();
+    }, 1200);
+  } catch (error) {
+    inquiryNotice.style.display = "block";
+    inquiryNotice.textContent = error.message || "Network error. Please try again.";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Send Enquiry";
+  }
+});
+
+inquiryModal.querySelector("[data-inquiry-whatsapp]")?.addEventListener("click", () => {
+  if (!inquiryForm.reportValidity()) return;
+  if (!CONFIG.whatsappNumber) return;
+  const d = Object.fromEntries(new FormData(inquiryForm).entries());
+  const message = `The Elite Stay PG & Hostel Room Enquiry\n\nRoom: ${d.roomType}\nPrice: ${d.roomPrice || "Not specified"}\nName: ${d.name}\nPhone: ${d.phone}\nMove-in: ${d.moveDate}\nRoom Preference: ${d.roomPreference}\nWashroom: ${d.washroomPreference}\nMessage: ${d.message || "No message"}`;
+  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank", "noopener");
+});
+
+const contactInquiryForm=document.querySelector("#inquiryForm");
+if(contactInquiryForm){
+  contactInquiryForm.setAttribute("action", FORMSPREE_ENDPOINT);
+  contactInquiryForm.setAttribute("method", "POST");
+  const roomSelect=contactInquiryForm.querySelector('[name="roomType"]');
   const chosen=sessionStorage.getItem("eliteStaySelectedRoom");
   if(chosen&&roomSelect){const match=[...roomSelect.options].find(o=>o.text.toLowerCase().includes(chosen.toLowerCase().replace(" room","")));if(match)roomSelect.value=match.value;sessionStorage.removeItem("eliteStaySelectedRoom");}
-  const notice=inquiryForm.querySelector(".notice");
+  const notice=contactInquiryForm.querySelector(".notice");
 
-  inquiryForm.addEventListener("submit", async e=>{
+  contactInquiryForm.addEventListener("submit", async e=>{
     e.preventDefault();
-    if(!inquiryForm.reportValidity())return;
-    const button=inquiryForm.querySelector("[data-submit-demo]");
+    if(!contactInquiryForm.reportValidity())return;
+    const button=contactInquiryForm.querySelector("[data-submit-demo]");
     button.disabled=true;
     button.textContent="Sending...";
     notice.style.display="none";
     try{
       const response=await fetch(FORMSPREE_ENDPOINT,{
         method:"POST",
-        body:new FormData(inquiryForm),
+        body:new FormData(contactInquiryForm),
         headers:{Accept:"application/json"}
       });
       const result=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(result.errors?.map(x=>x.message).join(", ")||`Submission failed (${response.status})`);
       notice.style.display="block";
       notice.textContent="Thank you! Your inquiry has been sent successfully.";
-      inquiryForm.reset();
+      contactInquiryForm.reset();
     }catch(error){
       notice.style.display="block";
       notice.textContent=error.message||"Network error. Please check your internet and try again.";
@@ -342,7 +401,7 @@ if(inquiryForm){
     }
   });
 
-  inquiryForm.querySelector("[data-send-whatsapp]")?.addEventListener("click",e=>{e.preventDefault();if(!inquiryForm.reportValidity())return;if(!CONFIG.whatsappNumber){notice.style.display="block";notice.textContent="WhatsApp is not configured yet. Add the real WhatsApp number in js/main.js before using this button.";return;}const d=Object.fromEntries(new FormData(inquiryForm).entries());
+  contactInquiryForm.querySelector("[data-send-whatsapp]")?.addEventListener("click",e=>{e.preventDefault();if(!contactInquiryForm.reportValidity())return;if(!CONFIG.whatsappNumber){notice.style.display="block";notice.textContent="WhatsApp is not configured yet. Add the real WhatsApp number in js/main.js before using this button.";return;}const d=Object.fromEntries(new FormData(contactInquiryForm).entries());
   const message=`The Elite Stay PG & Hostel Inquiry\n\nName: ${d.name}\nPhone: ${d.phone}\nEmail: ${d.email||"Not provided"}\nRoom: ${d.roomType}\nMove-in: ${d.moveDate||"Not specified"}\nOccupants: ${d.occupants||"Not specified"}\nMessage: ${d.message||"No message"}`;
   window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`,"_blank","noopener");
   });

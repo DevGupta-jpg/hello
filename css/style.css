@@ -3392,3 +3392,183 @@ body.modal-open {
     margin-top: 14px;
   }
 }
+
+/* Room enquiry popup + other-room references — additive only */
+.inquiry-room-modal{
+  max-width:770px;
+  border-radius:22px;
+  overflow:hidden;
+}
+.inquiry-room-header{
+  padding:24px 30px 18px;
+  border-bottom:1px solid #e8edf3;
+  background:#fff;
+}
+.inquiry-room-header .eyebrow{
+  display:block;
+  margin-bottom:6px;
+}
+.inquiry-room-header h2{
+  margin:0;
+  font-size:1.65rem;
+}
+.inquiry-room-content{
+  padding:24px 30px 28px;
+}
+.inquiry-room-grid{
+  gap:16px 20px;
+}
+.inquiry-room-grid .field input,
+.inquiry-room-grid .field select,
+.inquiry-room-grid .field textarea{
+  min-height:52px;
+  border-radius:15px;
+  background:#fff;
+  font-size:1rem;
+}
+.inquiry-room-grid .field textarea{
+  min-height:120px;
+}
+.inquiry-room-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:20px;
+}
+.inquiry-room-actions .btn{
+  min-height:52px;
+  border-radius:28px;
+  font-size:1rem;
+  font-weight:800;
+}
+.inquiry-whatsapp-btn{
+  background:#16b978;
+  border-color:#16b978;
+  color:#fff;
+}
+.inquiry-whatsapp-btn:hover{
+  background:#10a86c;
+  border-color:#10a86c;
+}
+.inquiry-room-modal .inquiry-close{
+  position:absolute;
+  top:18px;
+  right:22px;
+  z-index:2;
+  background:#fff;
+  border:1px solid #dfe6ed;
+  color:#667585;
+  width:48px;
+  height:48px;
+  font-size:1.65rem;
+}
+.inquiry-room-modal .notice{
+  margin-top:14px;
+}
+.property-video video{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  background:#18202b;
+}
+.property-other-rooms-section{
+  padding-top:6px;
+  padding-bottom:34px;
+}
+.property-other-rooms-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+  margin-top:18px;
+}
+.property-other-room-card{
+  overflow:hidden;
+  background:#fff;
+  border:1px solid #e4ebf3;
+  border-radius:20px;
+  box-shadow:0 8px 24px rgba(16,37,74,.06);
+}
+.property-other-room-image{
+  height:190px;
+  overflow:hidden;
+  background:#eaf5ff;
+}
+.property-other-room-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.property-other-room-body{
+  padding:18px;
+}
+.property-other-room-body .eyebrow{
+  font-size:.72rem;
+}
+.property-other-room-body h3{
+  margin:4px 0 8px;
+  font-size:1.25rem;
+}
+.property-other-room-price{
+  color:var(--blue);
+  font-weight:850;
+  font-size:1.1rem;
+}
+.property-other-room-price small{
+  color:#667585;
+  font-weight:500;
+  font-size:.78rem;
+}
+.property-other-room-body p{
+  color:#667585;
+  font-size:.88rem;
+  margin:9px 0 15px;
+}
+.property-other-room-actions{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:8px;
+}
+.property-other-room-actions .btn{
+  min-width:0;
+  width:100%;
+  padding:10px 8px;
+  white-space:nowrap;
+  font-size:.86rem;
+}
+@media(max-width:900px){
+  .property-other-rooms-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:767px){
+  .inquiry-room-header{
+    padding:22px 18px 15px;
+  }
+  .inquiry-room-header h2{
+    font-size:1.45rem;
+    padding-right:46px;
+  }
+  .inquiry-room-content{
+    padding:18px 16px 24px;
+  }
+  .inquiry-room-actions{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .inquiry-room-actions .btn{
+    min-height:50px;
+    padding:10px 8px;
+    font-size:.88rem;
+  }
+  .inquiry-room-modal .inquiry-close{
+    top:14px;
+    right:14px;
+    width:42px;
+    height:42px;
+  }
+  .property-other-rooms-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  .property-other-room-image{height:175px;}
+}
