@@ -170,7 +170,8 @@ if (propertyRoot) {
 
   const breakdown = propertyRoot.querySelector("[data-property-breakdown]");
   if (breakdown) breakdown.innerHTML = commonBreakdown.map(card=>`<article class="property-breakdown-card"><div class="property-breakdown-icon">${card.icon}</div><h3>${card.title}</h3><ul>${card.items.map(item=>`<li>${item}</li>`).join("")}</ul></article>`).join("");
-  propertyRoot.querySelector("[data-property-breakdown-title]").textContent = `What’s Inside Your ${room.name}`;
+  const breakdownTitle = propertyRoot.querySelector("[data-property-breakdown-title]");
+  if (breakdownTitle) breakdownTitle.textContent = `What’s Inside Your ${room.name}`;
   propertyRoot.querySelector("[data-property-overview-title]").textContent = `Comfortable Living at The Elite Stay PG & Hostel`;
   propertyRoot.querySelector("[data-property-overview-intro]").textContent = `Explore this complete ${room.name.toLowerCase()} accommodation in Beta 1, Greater Noida. Confirm current availability, deposit, food and other charges with management before booking.`;
   const overviewCopy = propertyRoot.querySelector("[data-property-overview-copy]");

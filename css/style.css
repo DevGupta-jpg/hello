@@ -3645,3 +3645,8 @@ body.modal-open {
     padding-right: 6px;
   }
 }
+
+/* Moved room-information sections: keep the existing Rooms page layout intact. */
+.rooms-moved-section .container{min-width:0}
+.rooms-moved-section h2{margin-top:6px}
+.rooms-moved-section{overflow:hidden}
