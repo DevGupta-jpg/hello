@@ -469,3 +469,123 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
     if(amenityDescription)amenityDescription.textContent=data[1];
   }));
 })();
+
+
+/* Nearby locations: additive filter/search/directions behavior only. */
+(function(){
+  const nearbyLocations = [
+    {name:"Jagat Farm Market",category:"market",label:"Markets & Malls",distance:"500 m · 5 min walk",mode:"Walk",description:"Street food, groceries, stationery, ATMs & daily essentials",icon:"fa-bag-shopping"},
+    {name:"Alpha 1 Commercial Belt",category:"market",label:"Markets & Malls",distance:"1.1 km · 4 min auto / 14 min walk",mode:"Auto / Walk",description:"Cafes, coaching centres, banks & shopping",icon:"fa-bag-shopping"},
+    {name:"Ansal Plaza Mall",category:"market",label:"Markets & Malls",distance:"1.5 km · 5 min drive",mode:"Drive / Auto",description:"Shopping, dining & hangout spots",icon:"fa-bag-shopping"},
+    {name:"Omaxe Connaught Place Mall",category:"market",label:"Markets & Malls",distance:"1.5 km · 5 min drive",mode:"Drive / Auto",description:"Multiplex cinema, food court & retail brands",icon:"fa-bag-shopping"},
+    {name:"MSX Mall",category:"market",label:"Markets & Malls",distance:"3.1 km · 9 min drive",mode:"Drive / Auto",description:"Cinema, shopping & restaurants",icon:"fa-bag-shopping"},
+    {name:"The Grand Venice Mall",category:"market",label:"Markets & Malls",distance:"3.4 km · 10 min drive",mode:"Drive / Auto",description:"Major mall, gaming zone & dining",icon:"fa-bag-shopping"},
+    {name:"Alpha 1 Metro Station (Aqua Line)",category:"metro",label:"Metro & Commute",distance:"1.0 km · 4 min e-rickshaw / 12 min walk",mode:"E-Rickshaw / Walk",description:"Nearest metro station for Noida & Delhi commute",icon:"fa-train-subway"},
+    {name:"Pari Chowk Metro Station",category:"metro",label:"Metro & Commute",distance:"1.6 km · 5 min drive",mode:"E-Rickshaw / Auto",description:"Major Greater Noida transit hub & bus stand",icon:"fa-train-subway"},
+    {name:"Delta 1 Metro Station",category:"metro",label:"Metro & Commute",distance:"1.9 km · 6 min drive",mode:"Auto / Drive",description:"Aqua Line station",icon:"fa-train-subway"},
+    {name:"Knowledge Park II Metro Station",category:"metro",label:"Metro & Commute",distance:"2.3 km · 7 min drive",mode:"E-Rickshaw / Drive",description:"Direct metro stop for Knowledge Park colleges",icon:"fa-train-subway"},
+    {name:"GNIDA Office Metro Station",category:"metro",label:"Metro & Commute",distance:"3.1 km · 9 min drive",mode:"Drive / Auto",description:"Aqua Line connectivity",icon:"fa-train-subway"},
+    {name:"IEC College of Engg. & Tech",category:"college",label:"Colleges & Universities",distance:"1.2 km · 4 min drive",mode:"E-Rickshaw",description:"Knowledge Park I, easy e-rickshaw access",icon:"fa-graduation-cap"},
+    {name:"Accurate Institute of Mgmt. & Tech",category:"college",label:"Colleges & Universities",distance:"2.3 km · 7 min drive",mode:"E-Rickshaw / Auto",description:"Knowledge Park III",icon:"fa-graduation-cap"},
+    {name:"Galgotias College (GCET)",category:"college",label:"Colleges & Universities",distance:"2.8 km · 8 min drive",mode:"Shared Auto",description:"Knowledge Park II, frequent shared autos",icon:"fa-graduation-cap"},
+    {name:"GNIOT & IILM University",category:"college",label:"Colleges & Universities",distance:"2.8 km · 8 min drive",mode:"E-Rickshaw / Auto",description:"Knowledge Park II campus cluster",icon:"fa-graduation-cap"},
+    {name:"NIET (Noida Inst. of Engg. & Tech)",category:"college",label:"Colleges & Universities",distance:"3.0 km · 9 min drive",mode:"Auto / Drive",description:"Knowledge Park II",icon:"fa-graduation-cap"},
+    {name:"Sharda University",category:"college",label:"Colleges & Universities",distance:"3.7 km · 10–12 min drive",mode:"E-Rickshaw",description:"Knowledge Park III, direct e-rickshaw route",icon:"fa-graduation-cap"},
+    {name:"GL Bajaj Institute of Tech & Mgmt.",category:"college",label:"Colleges & Universities",distance:"4.0 km · 10–12 min drive",mode:"Auto / E-Rickshaw",description:"Knowledge Park III, popular student route",icon:"fa-graduation-cap"},
+    {name:"Gautam Buddha University (GBU)",category:"college",label:"Colleges & Universities",distance:"8.4 km · 18 min drive",mode:"Drive / Auto",description:"Yamuna Expressway side",icon:"fa-graduation-cap"},
+    {name:"Beta 1 Local Market & ATMs",category:"hospital",label:"Hospitals & Daily",distance:"300 m · 3 min walk",mode:"Walk",description:"Medical store, dairy, photocopy & banks",icon:"fa-square-plus"},
+    {name:"Kailash Hospital, Greater Noida",category:"hospital",label:"Hospitals & Daily",distance:"700 m · 3 min drive / 8 min walk",mode:"Walk / Drive",description:"24×7 Multi-speciality & emergency care",icon:"fa-square-plus"},
+    {name:"Sharma Medicare Super Speciality",category:"hospital",label:"Hospitals & Daily",distance:"1.7 km · 5 min drive",mode:"Drive / Auto",description:"24×7 healthcare & trauma centre",icon:"fa-square-plus"},
+    {name:"Sharda Hospital",category:"hospital",label:"Hospitals & Daily",distance:"2.3 km · 7 min drive",mode:"Drive / Auto",description:"Multi-speciality hospital near Knowledge Park",icon:"fa-square-plus"},
+    {name:"Yatharth Super Speciality Hospital",category:"hospital",label:"Hospitals & Daily",distance:"2.9 km · 9 min drive",mode:"Drive / Auto",description:"Major super speciality hospital",icon:"fa-square-plus"}
+  ];
+
+  const origin = "The Elite Stay PG & Hostel, A-6, Beta 1, Greater Noida";
+  const iconMap = {college:"fa-graduation-cap", metro:"fa-train-subway", market:"fa-bag-shopping", hospital:"fa-square-plus"};
+  const categoryNames = {college:"Colleges & Universities", metro:"Metro & Commute", market:"Markets & Malls", hospital:"Hospitals & Daily"};
+
+  function directionsFor(name){
+    return "https://www.google.com/maps/dir/?api=1&origin=" + encodeURIComponent(origin) + "&destination=" + encodeURIComponent(name + ", Greater Noida, Uttar Pradesh");
+  }
+
+  function cardTemplate(item){
+    return `<article class="nearby-card" data-category="${item.category}" data-nearby-card data-search-text="${(item.name+" "+item.label+" "+item.description+" "+item.distance+" "+item.mode).toLowerCase()}">
+      <div class="nearby-card-top">
+        <div class="nearby-icon"><i class="fa-solid ${item.icon || iconMap[item.category]}" aria-hidden="true"></i></div>
+        <div class="nearby-card-main">
+          <span class="nearby-category">${item.label}</span>
+          <h3>${item.name}</h3>
+        </div>
+      </div>
+      <div class="nearby-meta">
+        <span class="nearby-distance"><i class="fa-solid fa-location-dot" aria-hidden="true"></i>${item.distance}</span>
+        <span class="nearby-mode">${item.mode}</span>
+      </div>
+      <p class="nearby-description">${item.description}</p>
+      <div class="nearby-card-footer">
+        <span class="nearby-origin">From Beta 1 Gate No. 1</span>
+        <a class="nearby-directions" href="${directionsFor(item.name)}" target="_blank" rel="noopener noreferrer">Directions →</a>
+      </div>
+    </article>`;
+  }
+
+  function setupNearby(){
+    const grid = document.querySelector("[data-nearby-grid]");
+    const sampleGrid = document.querySelector("[data-nearby-sample-grid]");
+    if(!grid && !sampleGrid) return;
+
+    if(grid){
+      grid.innerHTML = nearbyLocations.map(cardTemplate).join("");
+    }
+    if(sampleGrid){
+      const samples = [
+        nearbyLocations.find(x=>x.name==="GL Bajaj Institute of Tech & Mgmt."),
+        nearbyLocations.find(x=>x.name==="Alpha 1 Metro Station (Aqua Line)"),
+        nearbyLocations.find(x=>x.name==="Jagat Farm Market")
+      ].filter(Boolean);
+      sampleGrid.innerHTML = samples.map(cardTemplate).join("");
+    }
+
+    const tabs = document.querySelectorAll("[data-nearby-filter]");
+    const search = document.querySelector("[data-nearby-search]");
+    const empty = document.querySelector("[data-nearby-empty]");
+    const cards = () => [...document.querySelectorAll("[data-nearby-card]")];
+    let active = "all";
+
+    function apply(){
+      const term = (search?.value || "").trim().toLowerCase();
+      let shown = 0;
+      cards().forEach(card=>{
+        const categoryOk = active === "all" || card.dataset.category === active;
+        const textOk = !term || card.dataset.searchText.includes(term);
+        const visible = categoryOk && textOk;
+        card.hidden = !visible;
+        if(visible) shown++;
+      });
+      if(empty) empty.hidden = shown !== 0;
+    }
+
+    tabs.forEach(tab=>tab.addEventListener("click",()=>{
+      active = tab.dataset.nearbyFilter || "all";
+      tabs.forEach(t=>{
+        const on = t === tab;
+        t.classList.toggle("active", on);
+        t.setAttribute("aria-selected", String(on));
+      });
+      if(search) search.value = "";
+      apply();
+    }));
+    search?.addEventListener("input",apply);
+
+    document.querySelectorAll("[data-nearby-map]").forEach(a=>{
+      a.addEventListener("click",()=>{
+        const target = document.querySelector("#location");
+        if(target) setTimeout(()=>target.scrollIntoView({behavior:"smooth",block:"start"}), 0);
+      });
+    });
+    apply();
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", setupNearby);
+  else setupNearby();
+})();
