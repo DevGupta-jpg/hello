@@ -3798,3 +3798,24 @@ body.modal-open {
 @media (max-width: 767px) {
   .menu-toggle { display: none !important; }
 }
+
+/* Home page: three nearby reference cards below the map. */
+.nearby-home-reference-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.nearby-home-reference-grid .nearby-card { min-height: 265px; padding: 22px; }
+@media(max-width:980px) {
+  .nearby-home-reference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media(max-width:760px) {
+  .nearby-home-reference-section .nearby-hero-head h2 { font-size: clamp(1.8rem, 8vw, 2.5rem); }
+  .nearby-home-reference-section .nearby-hero-head p { font-size: .93rem; }
+  .nearby-home-reference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .nearby-home-reference-grid .nearby-card { min-height: 0; padding: 14px; border-radius: 15px; }
+}
+@media(max-width:480px) {
+  .nearby-home-reference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .nearby-home-reference-grid .nearby-card h3 { font-size: .78rem; }
+  .nearby-home-reference-grid .nearby-description { font-size: .66rem; }
+  .nearby-home-reference-grid .nearby-distance, .nearby-home-reference-grid .nearby-mode { font-size: .57rem; }
+  .nearby-home-reference-grid .nearby-origin { font-size: .52rem; }
+  .nearby-home-reference-grid .nearby-directions { font-size: .61rem; }
+}
