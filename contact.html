@@ -305,6 +305,63 @@
         </div>
     </div>
     <script src="js/main.js"></script>
+    <script>
+    /* Contact-page nearby filters: fallback binding for tabs + live search. */
+    (function () {
+      function initContactNearbyFilters() {
+        const root = document.querySelector('.nearby-tabs');
+        const search = document.querySelector('[data-nearby-search]');
+        const empty = document.querySelector('[data-nearby-empty]');
+        if (!root || !search) return;
+
+        let active = 'all';
+
+        function applyFilter() {
+          const term = search.value.trim().toLowerCase();
+          const cards = Array.from(document.querySelectorAll('[data-nearby-card]'));
+          let visibleCount = 0;
+
+          cards.forEach(function (card) {
+            const category = (card.getAttribute('data-category') || '').toLowerCase();
+            const searchable = (card.getAttribute('data-search-text') || card.textContent || '').toLowerCase();
+            const categoryMatch = active === 'all' || category === active;
+            const searchMatch = !term || searchable.indexOf(term) !== -1;
+            const visible = categoryMatch && searchMatch;
+
+            card.hidden = !visible;
+            if (visible) visibleCount++;
+          });
+
+          if (empty) empty.hidden = visibleCount !== 0;
+        }
+
+        root.addEventListener('click', function (event) {
+          const tab = event.target.closest('[data-nearby-filter]');
+          if (!tab || !root.contains(tab)) return;
+
+          event.preventDefault();
+          active = (tab.getAttribute('data-nearby-filter') || 'all').toLowerCase();
+
+          root.querySelectorAll('[data-nearby-filter]').forEach(function (item) {
+            const selected = item === tab;
+            item.classList.toggle('active', selected);
+            item.setAttribute('aria-selected', String(selected));
+          });
+
+          applyFilter();
+        });
+
+        search.addEventListener('input', applyFilter);
+        applyFilter();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContactNearbyFilters);
+      } else {
+        initContactNearbyFilters();
+      }
+    })();
+    </script>
 </body>
 
 </html>
