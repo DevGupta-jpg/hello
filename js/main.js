@@ -441,6 +441,15 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
   });
 });
 
+
+// Floating Instagram button alongside the existing WhatsApp button.
+document.querySelectorAll("[data-floating-instagram]").forEach(link=>{
+  link.addEventListener("click",event=>{
+    event.preventDefault();
+    window.open("https://www.instagram.com/theelitestaypg/","_blank","noopener");
+  });
+});
+
 // Facilities page: weekly menu tabs and interactive amenity chips.
 (function(){
   const menuData = {

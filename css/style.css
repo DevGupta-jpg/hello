@@ -3819,3 +3819,82 @@ body.modal-open {
   .nearby-home-reference-grid .nearby-origin { font-size: .52rem; }
   .nearby-home-reference-grid .nearby-directions { font-size: .61rem; }
 }
+
+/* Floating Instagram action - added alongside the existing WhatsApp action only. */
+.floating-instagram {
+    position: fixed;
+    right: 20px;
+    bottom: 135px;
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: auto;
+    padding: 9px 15px;
+    border: 1px solid #b7d7ff;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #833AB4, #E1306C, #F77737);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 6px 20px rgba(131, 58, 180, 0.22);
+    transition: transform .2s, box-shadow .2s;
+}
+.floating-instagram:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(131, 58, 180, 0.3);
+}
+.instagram-mark {
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-items: center;
+    background: #ffffff;
+    color: #E1306C;
+    border-radius: 50%;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+@media (max-width: 760px) {
+    .floating-instagram {
+        right: 12px;
+        bottom: 125px;
+        padding: 8px 12px;
+        font-size: 13px;
+        gap: 7px;
+    }
+    .instagram-mark {
+        width: 23px;
+        height: 23px;
+        font-size: 14px;
+    }
+}
+@media(max-width:760px) {
+  .floating-instagram {
+    right: 12px;
+    bottom: calc(136px + env(safe-area-inset-bottom)) !important;
+    width: 52px;
+    min-width: 52px;
+    height: 52px;
+    min-height: 52px;
+    padding: 0 !important;
+    border-radius: 50%;
+    gap: 0;
+    z-index: 1900;
+  }
+  .floating-instagram > span:last-child { display: none; }
+  .instagram-mark {
+    width: 31px !important;
+    height: 31px !important;
+    font-size: 1.2rem !important;
+    background: #fff;
+    border-radius: 50%;
+  }
+}
+@media(max-width:380px) {
+  .floating-instagram {
+    right: 9px;
+    bottom: calc(126px + env(safe-area-inset-bottom)) !important;
+  }
+}
