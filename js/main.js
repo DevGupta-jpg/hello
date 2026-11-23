@@ -139,10 +139,10 @@ if (propertyRoot) {
   const params = new URLSearchParams(location.search);
   const requested = params.get("room") || "4-seater-room";
   const roomBySlug = {
-    "4-seater-room": {name:"4 Seater Room", price:"₹6,000", type:"Shared room", furnishing:"Furnished", preference:"Any", description:"Comfortable shared accommodation with essential facilities, suitable for students and working professionals.", images:ROOM_MEDIA["4 Seater Room"]},
-    "3-seater-room": {name:"3 Seater Room", price:"₹8,000", type:"Shared room", furnishing:"Furnished", preference:"Any", description:"A practical three-seater setup with a comfortable layout, Wi-Fi and everyday living essentials.", images:ROOM_MEDIA["3 Seater Room"]},
-    "2-seater-room": {name:"2 Seater Room", price:"₹9,000", type:"Shared room", furnishing:"Furnished", preference:"Any", description:"A comfortable two-seater room designed for privacy, convenience and a clean living experience.", images:ROOM_MEDIA["2 Seater Room"]},
-    "1-seater-room": {name:"1 Seater Room", price:"₹11,000", type:"Private room", furnishing:"Furnished", preference:"Any", description:"A private furnished room option for residents who prefer their own personal space and comfort.", images:ROOM_MEDIA["1 Seater Room"]}
+    "4-seater-room": {name:"4 Seater Room", price:"₹10,000–₹11,000", type:"Shared room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"Comfortable shared accommodation with essential facilities, suitable for students and working professionals.", images:ROOM_MEDIA["4 Seater Room"]},
+    "3-seater-room": {name:"3 Seater Room", price:"₹12,000–₹15,000", type:"Shared room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"A practical three-seater setup with a comfortable layout, Wi-Fi and everyday living essentials.", images:ROOM_MEDIA["3 Seater Room"]},
+    "2-seater-room": {name:"2 Seater Room", price:"₹16,000–₹20,000", type:"Shared room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"A comfortable two-seater room designed for privacy, convenience and a clean living experience.", images:ROOM_MEDIA["2 Seater Room"]},
+    "1-seater-room": {name:"1 Seater Room", price:"₹30,000–₹31,000", type:"Private room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"A private furnished room option for residents who prefer their own personal space and comfort.", images:ROOM_MEDIA["1 Seater Room"]}
   };
   const room = roomBySlug[requested] || roomBySlug["4-seater-room"];
   const gallery = propertyRoot.querySelector("[data-property-gallery]");
