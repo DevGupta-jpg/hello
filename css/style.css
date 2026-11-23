@@ -3632,3 +3632,16 @@ body.modal-open {
   .property-check-card{padding:20px}
 }
 @media(max-width:480px){.property-feature-grid{grid-template-columns:1fr}}
+
+/* Rooms page heading alignment only — keeps existing section order/content and does not affect enquiry form. */
+.page-rooms .section-head {
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+@media (max-width: 767px) {
+  .page-rooms .section-head {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
