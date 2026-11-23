@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Room details | The Elite Stay PG & Hostel">
+<meta name="theme-color" content="#006bff">
+<title>Room Details | The Elite Stay PG & Hostel</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="page-property">
+<header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="images/elite-stay-logo.png" alt="The Elite Stay PG & Hostel Logo" class="brand-logo"><span>The Elite Stay PG & Hostel<small>Your Comfort, Our Priority</small></span></a><button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button><nav class="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="rooms.html" class="active">Rooms</a><a href="facilities.html">Facilities</a><a href="gallery.html">Gallery</a><a href="contact.html">Contact</a></nav><a class="btn nav-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdJS4FL_7Egk9JB6NDUkHLVC7mzzREMZd3Gk2sWOfkp1ZcB3Q/viewform">▣ Book Now</a></div></header>
+<main data-property-page>
+<section class="section property-detail-section"><div class="container">
+<div class="property-top">
+  <div class="property-media"><div class="property-gallery" data-property-gallery></div></div>
+  <aside class="property-summary card"><span class="eyebrow">ROOM DETAILS</span><h1 data-property-title>Room Details</h1><div class="property-location">⌖ Beta 1, Greater Noida</div><div class="price property-price" data-property-price></div><p data-property-description></p><div class="property-meta"><div><strong>Room type</strong><span data-property-type></span></div><div><strong>Furnishing</strong><span data-property-furnishing></span></div><div><strong>Cooling</strong><span>AC</span></div><div><strong>Washroom</strong><span>Attached Washroom</span></div><div><strong>Preference</strong><span data-property-preference></span></div></div><button class="btn property-book" type="button" data-property-book>Submit Enquiry</button><a class="btn btn-outline property-map" href="https://www.google.com/maps/dir/?api=1&destination=28.4769706,77.5034043" target="_blank" rel="noopener">View Location ↗</a></aside>
+</div>
+<div class="property-video-card card"><div><span class="eyebrow">ROOM TOUR</span><h2 data-property-video-title>Room Video</h2><p class="muted">Each room has its own separate room-tour video. You can add the video URL for this room later.</p></div><div class="property-video" data-property-video></div></div>
+<div class="property-tabs"><a href="#overview">Overview</a><a href="#breakdown">Room Breakdown</a><a href="#amenities">Amenities</a><a href="#location">Location</a><a href="#enquiry">Enquiry</a></div>
+<section id="overview" class="property-section property-overview-card"><span class="eyebrow">OVERVIEW</span><h2 data-property-overview-title>Comfortable Living at The Elite Stay PG & Hostel</h2><p data-property-overview-intro>Explore this accommodation option in Greater Noida. Confirm current availability, deposit, food and other charges with management before booking.</p><div class="property-overview-copy" data-property-overview-copy></div></section>
+<section id="breakdown" class="property-section property-breakdown-section"><span class="eyebrow">ROOM BREAKDOWN</span><h2 data-property-breakdown-title>What’s Inside Your Room</h2><div class="property-breakdown-grid" data-property-breakdown></div></section>
+<section id="amenities" class="property-section"><span class="eyebrow">AMENITIES</span><h2>Room Amenities</h2><div class="property-amenities"><div>⌁ High-Speed Wi-Fi</div><div>♨ 3-Time Meals</div><div>❄ AC</div><div>▣ Fully Furnished</div><div>♨ Geyser (Hot Water)</div><div>▤ Personal Almirah</div><div>⌑ Study Table & Chair</div><div>⌂ Attached Washroom</div><div>✧ Daily Housekeeping</div><div>◯ RO Drinking Water</div><div>ϟ 24×7 Power Backup</div><div>♢ CCTV & Security</div></div></section>
+<section id="location" class="property-section"><span class="eyebrow">LOCATION</span><h2>Beta 1, Greater Noida</h2><div class="map-frame"><iframe data-map title="The Elite Stay PG & Hostel location" src="https://maps.google.com/maps?q=28.4769706,77.5034043&z=17&output=embed" loading="lazy"></iframe></div></section>
+<section id="enquiry" class="property-cta card"><div><span class="eyebrow">INTERESTED IN THIS ROOM?</span><h2>Send an Enquiry</h2><p class="muted">Ask about availability, rent and booking details.</p></div><button class="btn" type="button" data-property-book>Submit Enquiry →</button></section>
+<section class="property-section property-other-rooms-section"><div class="section-head"><div><span class="eyebrow">OTHER ROOM OPTIONS</span><h2>Explore Other Rooms</h2><p class="muted">Compare our other room options and enquire directly.</p></div></div><div class="property-other-rooms-grid" data-other-rooms></div></section>
+</div></section></main>
+<footer class="footer elite-professional-footer">
+  <div class="container">
+    <div class="elite-footer-grid">
+      <div class="elite-footer-column elite-footer-about">
+        <div class="elite-footer-brand">
+          <img src="images/elite-stay-logo.png" alt="The Elite Stay PG & Hostel Logo" class="elite-footer-logo">
+          <div>
+            <strong>The Elite Stay PG & Hostel</strong>
+            <span>Your Comfort, Our Priority</span>
+          </div>
+        </div>
+        <p>Your comfortable and trusted stay in Greater Noida. Explore rooms, facilities and connect with us for your next stay.</p>
+      </div>
+
+      <div class="elite-footer-column">
+        <h3>Quick Links</h3>
+        <div class="elite-footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="rooms.html">Rooms</a>
+          <a href="facilities.html">Facilities</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="elite-footer-column">
+        <h3>Contact Us</h3>
+        <div class="elite-footer-contact">
+          <a href="tel:+919319800234"><i class="fa-solid fa-phone" aria-hidden="true"></i><span>+91 93198 00234</span></a>
+          <a href="mailto:theelitestaypghostel@gmail.com"><i class="fa-solid fa-envelope" aria-hidden="true"></i><span>theelitestaypghostel@gmail.com</span></a>
+          <a href="https://www.google.com/maps/search/?api=1&query=28.4769706,77.5034043" target="_blank" rel="noopener"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>Beta 1, Greater Noida</span></a>
+        </div>
+        <h3 class="elite-footer-social-title">Follow Us</h3>
+        <div class="footer-social-only" aria-label="Social links">
+          <a href="https://wa.me/919319800234" target="_blank" rel="noopener" aria-label="WhatsApp The Elite Stay PG & Hostel" class="footer-social whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+          <a href="https://www.instagram.com/theelitestaypg/" target="_blank" rel="noopener" aria-label="Instagram The Elite Stay PG & Hostel" class="footer-social instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+          <a href="https://www.linkedin.com/in/the-elite-stay-g-b77493451/" target="_blank" rel="noopener" aria-label="LinkedIn The Elite Stay PG & Hostel" class="footer-social linkedin"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom elite-professional-bottom">
+      <span>© 2026 The Elite Stay PG & Hostel. All rights reserved.</span>
+      <span>Made with <span aria-hidden="true">♥</span> for a better living experience.</span>
+    </div>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body></html>

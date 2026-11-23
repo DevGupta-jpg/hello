@@ -3395,12 +3395,16 @@ body.modal-open {
 
 /* Room enquiry popup + other-room references — additive only */
 .inquiry-room-modal{
-  max-width:770px;
-  border-radius:22px;
+  width:min(100%, 680px);
+  max-width:680px;
+  max-height:84vh;
+  max-height:84dvh;
+  border-radius:20px;
   overflow:hidden;
+  box-sizing:border-box;
 }
 .inquiry-room-header{
-  padding:24px 30px 18px;
+  padding:20px 24px 15px;
   border-bottom:1px solid #e8edf3;
   background:#fff;
 }
@@ -3410,35 +3414,40 @@ body.modal-open {
 }
 .inquiry-room-header h2{
   margin:0;
-  font-size:1.65rem;
+  font-size:1.55rem;
 }
 .inquiry-room-content{
-  padding:24px 30px 28px;
+  padding:18px 24px 22px;
 }
 .inquiry-room-grid{
-  gap:16px 20px;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:13px 16px;
 }
 .inquiry-room-grid .field input,
 .inquiry-room-grid .field select,
 .inquiry-room-grid .field textarea{
-  min-height:52px;
-  border-radius:15px;
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  border-radius:13px;
   background:#fff;
-  font-size:1rem;
+  font-size:.96rem;
+  box-sizing:border-box;
 }
 .inquiry-room-grid .field textarea{
-  min-height:120px;
+  min-height:100px;
+  resize:vertical;
 }
 .inquiry-room-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:20px;
+  gap:12px;
+  margin-top:16px;
 }
 .inquiry-room-actions .btn{
-  min-height:52px;
-  border-radius:28px;
-  font-size:1rem;
+  min-height:48px;
+  border-radius:26px;
+  font-size:.95rem;
   font-weight:800;
 }
 .inquiry-whatsapp-btn{
@@ -3458,9 +3467,9 @@ body.modal-open {
   background:#fff;
   border:1px solid #dfe6ed;
   color:#667585;
-  width:48px;
-  height:48px;
-  font-size:1.65rem;
+  width:42px;
+  height:42px;
+  font-size:1.45rem;
 }
 .inquiry-room-modal .notice{
   margin-top:14px;
@@ -3541,19 +3550,24 @@ body.modal-open {
   .property-other-rooms-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
 @media(max-width:767px){
+  .inquiry-room-modal{
+    width:100%;
+    max-width:100%;
+    max-height:calc(100dvh - 16px);
+  }
   .inquiry-room-header{
-    padding:22px 18px 15px;
+    padding:18px 16px 13px;
   }
   .inquiry-room-header h2{
     font-size:1.45rem;
     padding-right:46px;
   }
   .inquiry-room-content{
-    padding:18px 16px 24px;
+    padding:16px 14px 20px;
   }
   .inquiry-room-actions{
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:9px;
   }
   .inquiry-room-actions .btn{
     min-height:50px;
