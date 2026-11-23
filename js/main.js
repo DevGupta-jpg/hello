@@ -550,11 +550,14 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
   function setupNearby(){
     const grid = document.querySelector("[data-nearby-grid]");
     const sampleGrid = document.querySelector("[data-nearby-sample-grid]");
-    if(!grid && !sampleGrid) return;
+    const tabRoot = document.querySelector(".nearby-tabs");
+    const search = document.querySelector("[data-nearby-search]");
+    const empty = document.querySelector("[data-nearby-empty]");
+    if(!grid || !tabRoot || !search) return;
+    if(tabRoot.dataset.nearbyReady === "1") return;
+    tabRoot.dataset.nearbyReady = "1";
 
-    if(grid){
-      grid.innerHTML = nearbyLocations.map(cardTemplate).join("");
-    }
+    grid.innerHTML = nearbyLocations.map(cardTemplate).join("");
     if(sampleGrid){
       const samples = [
         nearbyLocations.find(x=>x.name==="GL Bajaj Institute of Tech & Mgmt."),
@@ -564,47 +567,42 @@ document.querySelectorAll("[data-floating-whatsapp]").forEach(link=>{
       sampleGrid.innerHTML = samples.map(cardTemplate).join("");
     }
 
-    const tabs = document.querySelectorAll("[data-nearby-filter]");
-    const search = document.querySelector("[data-nearby-search]");
-    const empty = document.querySelector("[data-nearby-empty]");
-    const cards = () => [...document.querySelectorAll("[data-nearby-card]")];
     let active = "all";
 
     function apply(){
-      const term = (search?.value || "").trim().toLowerCase();
+      const term = (search.value || "").trim().toLowerCase();
       let shown = 0;
-      cards().forEach(card=>{
-        const categoryOk = active === "all" || card.dataset.category === active;
-        const textOk = !term || card.dataset.searchText.includes(term);
+      grid.querySelectorAll("[data-nearby-card]").forEach(card=>{
+        const categoryOk = active === "all" || (card.dataset.category || "") === active;
+        const searchable = (card.dataset.searchText || card.textContent || "").toLowerCase();
+        const textOk = !term || searchable.includes(term);
         const visible = categoryOk && textOk;
+
+        // Use both the hidden property and an inline display rule so the filter
+        // works reliably on desktop and mobile even if another CSS rule styles cards.
         card.hidden = !visible;
+        card.style.display = visible ? "flex" : "none";
+        card.setAttribute("aria-hidden", String(!visible));
         if(visible) shown++;
       });
+
       if(empty) empty.hidden = shown !== 0;
     }
 
-    const tabRoot = document.querySelector(".nearby-tabs");
-    tabRoot?.addEventListener("click", event=>{
-      const tab = event.target.closest("[data-nearby-filter]");
-      if(!tab || !tabRoot.contains(tab)) return;
-      event.preventDefault();
-      active = tab.dataset.nearbyFilter || "all";
-      tabs.forEach(t=>{
-        const on = t === tab;
-        t.classList.toggle("active", on);
-        t.setAttribute("aria-selected", String(on));
+    tabRoot.querySelectorAll("[data-nearby-filter]").forEach(tab=>{
+      tab.addEventListener("click", event=>{
+        event.preventDefault();
+        active = (tab.dataset.nearbyFilter || "all").toLowerCase();
+        tabRoot.querySelectorAll("[data-nearby-filter]").forEach(t=>{
+          const selected = t === tab;
+          t.classList.toggle("active", selected);
+          t.setAttribute("aria-selected", String(selected));
+        });
+        apply();
       });
-      if(search) search.value = "";
-      apply();
     });
-    search?.addEventListener("input",apply);
 
-    document.querySelectorAll("[data-nearby-map]").forEach(a=>{
-      a.addEventListener("click",()=>{
-        const target = document.querySelector("#location");
-        if(target) setTimeout(()=>target.scrollIntoView({behavior:"smooth",block:"start"}), 0);
-      });
-    });
+    search.addEventListener("input", apply);
     apply();
   }
 
