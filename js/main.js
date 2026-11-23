@@ -133,32 +133,63 @@ document.querySelectorAll("[data-room-card]").forEach(card => {
   }, 5000);
 });
 
-/* Property detail page: four images + a compact room-tour video and complete room information. */
+/* Property detail page: room-specific gallery, pricing, details and separate video slot. */
+const ROOM_VIDEOS = {
+  "4 Seater Room": "https://www.youtube.com/embed/rCuTx_9EP3w",
+  "3 Seater Room": "",
+  "2 Seater Room": "",
+  "1 Seater Room": ""
+};
+
 const propertyRoot = document.querySelector("[data-property-page]");
 if (propertyRoot) {
   const params = new URLSearchParams(location.search);
   const requested = params.get("room") || "4-seater-room";
+  const commonBreakdown = [
+    {icon:"▱", title:"Bed & Personal Storage", items:["Individual bed with comfortable mattress & pillow","Personal lockable almirah (wardrobe) for each resident","Dedicated bedside switchboard & charging point"]},
+    {icon:"⌑", title:"Study & Comfort", items:["Dedicated study table & ergonomic chair","AC available for comfortable living","High-speed Wi-Fi coverage"]},
+    {icon:"⌂", title:"Washroom & Utilities", items:["Attached washroom with every room","24×7 electric geyser for hot water","24×7 power backup, RO drinking water & daily housekeeping"]}
+  ];
   const roomBySlug = {
-    "4-seater-room": {name:"4 Seater Room", price:"₹10,000–₹11,000", type:"Shared room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"Comfortable shared accommodation with essential facilities, suitable for students and working professionals.", images:ROOM_MEDIA["4 Seater Room"]},
-    "3-seater-room": {name:"3 Seater Room", price:"₹12,000–₹15,000", type:"Shared room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"A practical three-seater setup with a comfortable layout, Wi-Fi and everyday living essentials.", images:ROOM_MEDIA["3 Seater Room"]},
-    "2-seater-room": {name:"2 Seater Room", price:"₹16,000–₹20,000", type:"Shared room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"A comfortable two-seater room designed for privacy, convenience and a clean living experience.", images:ROOM_MEDIA["2 Seater Room"]},
-    "1-seater-room": {name:"1 Seater Room", price:"₹30,000–₹31,000", type:"Private room", furnishing:"Furnished", preference:"Balcony / Non-Balcony", description:"A private furnished room option for residents who prefer their own personal space and comfort.", images:ROOM_MEDIA["1 Seater Room"]}
+    "4-seater-room": {name:"4 Seater Room", price:"₹10,000–₹11,000", type:"Shared room (4 Seater)", furnishing:"Fully Furnished", preference:"Balcony / Non-Balcony", description:"Comfortable shared accommodation with essential facilities, suitable for students and working professionals."},
+    "3-seater-room": {name:"3 Seater Room", price:"₹12,000–₹15,000", type:"Shared room (3 Seater)", furnishing:"Fully Furnished", preference:"Balcony / Non-Balcony", description:"A practical three-seater setup with a comfortable layout, AC, attached washroom and everyday living essentials."},
+    "2-seater-room": {name:"2 Seater Room", price:"₹16,000–₹20,000", type:"Shared room (2 Seater)", furnishing:"Fully Furnished", preference:"Balcony / Non-Balcony", description:"A comfortable two-seater room designed for privacy, convenience, AC comfort and a clean living experience."},
+    "1-seater-room": {name:"1 Seater Room", price:"₹30,000–₹31,000", type:"Private room (1 Seater)", furnishing:"Fully Furnished", preference:"Balcony / Non-Balcony", description:"A private furnished room option for residents who prefer their own personal space, AC comfort and an attached washroom."}
   };
   const room = roomBySlug[requested] || roomBySlug["4-seater-room"];
   const gallery = propertyRoot.querySelector("[data-property-gallery]");
-  if (gallery) gallery.innerHTML = room.images.map((src,i)=>`<img src="${src}" alt="${room.name} - image ${i+1}" loading="lazy">`).join("");
+  const images = ROOM_MEDIA[room.name] || ROOM_MEDIA["4 Seater Room"];
+  if (gallery) gallery.innerHTML = images.map((src,i)=>`<img src="${src}" alt="${room.name} - image ${i+1}" loading="lazy">`).join("");
   propertyRoot.querySelector("[data-property-title]").textContent = room.name;
   propertyRoot.querySelector("[data-property-price]").innerHTML = `${room.price}<small> / month</small>`;
   propertyRoot.querySelector("[data-property-type]").textContent = room.type;
   propertyRoot.querySelector("[data-property-furnishing]").textContent = room.furnishing;
   propertyRoot.querySelector("[data-property-preference]").textContent = room.preference;
   propertyRoot.querySelector("[data-property-description]").textContent = room.description;
-  propertyRoot.querySelector("[data-property-book]")?.addEventListener("click",()=>{
+
+  const breakdown = propertyRoot.querySelector("[data-property-breakdown]");
+  if (breakdown) breakdown.innerHTML = commonBreakdown.map(card=>`<article class="property-breakdown-card"><div class="property-breakdown-icon">${card.icon}</div><h3>${card.title}</h3><ul>${card.items.map(item=>`<li>${item}</li>`).join("")}</ul></article>`).join("");
+  propertyRoot.querySelector("[data-property-breakdown-title]").textContent = `What’s Inside Your ${room.name}`;
+  propertyRoot.querySelector("[data-property-overview-title]").textContent = `Comfortable Living at The Elite Stay PG & Hostel`;
+  propertyRoot.querySelector("[data-property-overview-intro]").textContent = `Explore this complete ${room.name.toLowerCase()} accommodation in Beta 1, Greater Noida. Confirm current availability, deposit, food and other charges with management before booking.`;
+  const overviewCopy = propertyRoot.querySelector("[data-property-overview-copy]");
+  if (overviewCopy) overviewCopy.innerHTML = `<p><strong>Room Space & Comfort:</strong> The ${room.name.toLowerCase()} is designed for students and working professionals who want a clean, comfortable and well-managed stay. Residents get an individual bed, comfortable mattress, pillow and fresh bedsheet, with a choice of <strong>Balcony</strong> or <strong>Non-Balcony</strong> preference depending on availability.</p><p><strong>Furniture, Study Setup & Personal Almirah:</strong> Every resident gets personal storage with an individual lock, along with a dedicated <strong>study table and chair</strong> for study, assignments or work-from-home use.</p><p><strong>AC, Geyser & Attached Washroom:</strong> The room is equipped with <strong>AC</strong> for comfortable living. Every room has an <strong>Attached Washroom</strong> and access to a 24×7 geyser for hot water, along with regular housekeeping and continuous water supply.</p><p><strong>Homey Meals, High-Speed Wi-Fi & 24×7 Security:</strong> The stay includes high-speed Wi-Fi, nutritious <strong>3-time meals</strong>, RO drinking water, 24×7 power backup, daily housekeeping and CCTV/security support.</p>`;
+
+  const videoWrap = propertyRoot.querySelector("[data-property-video]");
+  const videoTitle = propertyRoot.querySelector("[data-property-video-title]");
+  const videoSrc = ROOM_VIDEOS[room.name] || "";
+  if (videoTitle) videoTitle.textContent = `${room.name} Video`;
+  if (videoWrap) {
+    videoWrap.innerHTML = videoSrc
+      ? `<iframe src="${videoSrc}" title="${room.name} room tour video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`
+      : `<div class="property-video-placeholder"><span class="property-video-play">▶</span><strong>${room.name} Video</strong><small>Add this room’s separate video URL in <code>ROOM_VIDEOS</code> inside <code>js/main.js</code>.</small></div>`;
+  }
+
+  propertyRoot.querySelectorAll("[data-property-book]").forEach(btn=>btn.addEventListener("click",()=>{
     sessionStorage.setItem("eliteStaySelectedRoom", room.name);
     location.href = "contact.html#contact-form";
-  });
+  }));
 }
-
 
 const lightbox=document.querySelector("#lightbox");
 let lightboxItems=[],lightboxIndex=0;
