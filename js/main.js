@@ -108,28 +108,28 @@ if (modalBackdrop) {
 /* Auto-rotate room-card images every 5 seconds on every page that contains room cards. */
 const ROOM_MEDIA = {
   "4 Seater Room": [
-    "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=85"
+    "images/3 seater 3.jpeg",
+    "images/3 seater 1 .jpeg",
+    "images/3 Seater Room.jpeg",
+    "images/Building & Entrance.jpeg"
   ],
   "3 Seater Room": [
-    "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=900&q=85"
+    "images/3 Seater Room.jpeg",
+    "images/3 seater 1 .jpeg",
+    "images/3 seater 3.jpeg",
+    "images/Building & Entrance.jpeg"
   ],
   "2 Seater Room": [
-    "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=85"
+    "images/Two Seater.jpeg",
+    "images/2 Seater room 2 .jpeg",
+    "images/2 Seater Room.jpeg",
+    "images/2 Seater Room.jpeg"
   ],
   "1 Seater Room": [
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85",
-    "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=900&q=85"
+    "images/single sharing private room 1.png",
+    "images/single sharing private room 1 img 2.png",
+    "images/single sharing private room 1.png",
+    "images/single sharing private room 1 img 2.png"
   ]
 };
 
@@ -153,11 +153,8 @@ document.querySelectorAll("[data-room-card]").forEach(card => {
 
 /* Property detail page: room-specific gallery, pricing, details and separate video slot. */
 const ROOM_VIDEOS = {
-  // Temporary demo video URLs. Replace each URL later with that room's own video.
-  "4 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  "3 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  "2 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-  "1 Seater Room": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+  "3 Seater Room": "images/3 seater roo video.mp4",
+  "2 Seater Room": "images/2 seater roomvideo.mp4"
 };
 
 const propertyRoot = document.querySelector("[data-property-page]");
